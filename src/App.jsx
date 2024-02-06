@@ -1,26 +1,29 @@
 import { useState } from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import 'tailwindcss/tailwind.css';
 
-import Index from './pages/index'
-import Login from './pages/login'
-import Register from './pages/register';
-import NewProduct from './pages/new-product';
-import Products from './pages/products';
+import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
+import System from './pages/System.jsx'
+import Inventory from './pages/Inventory.jsx'
+import NewProduct from './pages/NewProduct.jsx'
+
 
 function App() {
+
   return (
-    
+
+
     <BrowserRouter>
       <Routes>
-        <Route path="/index" element={<Index />} />
-        <Route path="/login" element={<Login />} />
+
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/new-product" element={<NewProduct />} />
+        <Route path="/system" element={<System />} />
+        <Route path="/system/inventory" element={<Inventory/>} />
+        <Route path="/system/new-product" element={<NewProduct/>} />
       </Routes>
     </BrowserRouter>
-    
+
   )
 }
 
