@@ -1,20 +1,21 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
+import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white font-bold text-xl">Mi Sitio</div>
-        <ul className="flex space-x-4">
-          <li><a href="#" className="text-white hover:text-gray-300">Inicio</a></li>
-          <li><a href="#" className="text-white hover:text-gray-300">Acerca de</a></li>
-          <li><a href="#" className="text-white hover:text-gray-300">Servicios</a></li>
-          <li><a href="#" className="text-white hover:text-gray-300">Contacto</a></li>
-        </ul>
-      </div>
+    <div className="bg-gray-800 h-screen w-64 fixed left-0 top-0 overflow-y-auto">
+    <div className="flex items-center justify-center mt-10">
+      <span className="text-white text-2xl font-semibold">Bodega</span>
+    </div>
+    <nav className="mt-10">
+        <Link to="/index" className="block py-2 px-4 text-white hover:bg-gray-700">Inicio</Link>
+        <Link to="/products" className="block py-2 px-4 text-white hover:bg-gray-700">Lista de productos</Link>
+        <Link to="/new-product" className="block py-2 px-4 text-white hover:bg-gray-700">Nuevo Producto</Link>
+        <Link to="/login" className="block py-2 px-4 text-white hover:bg-gray-700">Cerrar sesion</Link>    
     </nav>
+  </div>
   );
 };
 

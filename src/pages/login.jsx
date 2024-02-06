@@ -3,9 +3,7 @@ import Navbar from '../components/navbar'
 
 const login = () => {
   return (
-    <>
-    <Navbar />
-    </>
+    <div>login</div>
   )
 }
 

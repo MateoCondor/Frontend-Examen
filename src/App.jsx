@@ -4,15 +4,23 @@ import 'tailwindcss/tailwind.css';
 
 import Index from './pages/index'
 import Login from './pages/login'
+import Register from './pages/register';
+import NewProduct from './pages/new-product';
+import Products from './pages/products';
 
 function App() {
   return (
+    
     <BrowserRouter>
       <Routes>
         <Route path="/index" element={<Index />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/new-product" element={<NewProduct />} />
       </Routes>
     </BrowserRouter>
+    
   )
 }
 
