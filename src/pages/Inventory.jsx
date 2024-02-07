@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Card, CardContent, Button } from '@mui/material';
 import VerticalNavbar from "../components/VerticalNavbar";
+import axios from 'axios';
 
 const Inventory = () => {
   const [products, setProducts] = useState([]);
@@ -8,9 +9,8 @@ const Inventory = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/product');
-        const data = await response.json();
-        setProducts(data);
+        const response = await axios.get('http://localhost:3000/product');
+        setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -19,9 +19,14 @@ const Inventory = () => {
     fetchProducts();
   }, []);
 
-  const handleDelete = (productId) => {
-    // Add your delete logic here
-    console.log(`Deleting product with ID ${productId}`);
+  const handleDelete = async (productId) => {
+    try {
+      await axios.delete(`http://localhost:3000/product/${productId}`);
+      setProducts(products.filter(product => product._id !== productId));
+      console.log(`Product with ID ${productId} deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting product with ID ${productId}:`, error);
+    }
   };
 
   const handleEdit = (productId) => {
@@ -58,14 +63,14 @@ const Inventory = () => {
                 </TableHead>
                 <TableBody>
                   {products.map((product) => (
-                    <TableRow key={product._id}>
-                      <TableCell>{product._id}</TableCell>
+                    <TableRow key={product.id}>
+                      <TableCell>{product.id}</TableCell>
                       <TableCell>{product.title}</TableCell>
                       <TableCell align="right">{product.quantity}</TableCell>
                       <TableCell align="right">{product.price}</TableCell>
                       <TableCell align="center">
-                        <Button variant="outlined" color="secondary" onClick={() => handleDelete(product._id)}>Eliminar</Button>
-                        <Button variant="outlined" color="primary" onClick={() => handleEdit(product._id)}>Editar</Button>
+                        <Button variant="outlined" color="secondary" onClick={() => handleDelete(product.id)}>Eliminar</Button>
+                        <Button variant="outlined" color="primary" onClick={() => handleEdit(product.id)}>Editar</Button>
                       </TableCell>
                     </TableRow>
                   ))}
