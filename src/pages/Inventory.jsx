@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Card, CardContent, Button } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Card, CardContent, Button, TextField, Modal } from '@mui/material';
 import VerticalNavbar from "../components/VerticalNavbar";
 import axios from 'axios';
 
 const Inventory = () => {
   const [products, setProducts] = useState([]);
+  const [editProductId, setEditProductId] = useState(null);
+  const [editProductTitle, setEditProductTitle] = useState('');
+  const [editProductQuantity, setEditProductQuantity] = useState(0);
+  const [editProductPrice, setEditProductPrice] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,16 +27,47 @@ const Inventory = () => {
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`http://localhost:3000/product/${productId}`);
-      setProducts(products.filter(product => product._id !== productId));
+      setProducts(products.filter(product => product.id !== productId));
       console.log(`Product with ID ${productId} deleted successfully`);
     } catch (error) {
       console.error(`Error deleting product with ID ${productId}:`, error);
     }
   };
 
-  const handleEdit = (productId) => {
-    // Add your edit logic here
-    console.log(`Editing product with ID ${productId}`);
+  const handleEdit = (productId, title, quantity, price) => {
+    setEditProductId(productId);
+    setEditProductTitle(title);
+    setEditProductQuantity(quantity);
+    setEditProductPrice(price);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setEditProductId(null);
+    setEditProductTitle('');
+    setEditProductQuantity(0);
+    setEditProductPrice(0);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      await axios.put(`http://localhost:3000/product/${editProductId}`, {
+        title: editProductTitle,
+        quantity: editProductQuantity,
+        price: editProductPrice
+      });
+      // Actualizar el producto en la lista
+      setProducts(products.map(product =>
+        product.id === editProductId
+          ? { ...product, title: editProductTitle, quantity: editProductQuantity, price: editProductPrice }
+          : product
+      ));
+      console.log(`Product with ID ${editProductId} edited successfully`);
+      handleCloseModal();
+    } catch (error) {
+      console.error(`Error editing product with ID ${editProductId}:`, error);
+    }
   };
 
   return (
@@ -70,7 +106,7 @@ const Inventory = () => {
                       <TableCell align="right">{product.price}</TableCell>
                       <TableCell align="center">
                         <Button variant="outlined" color="secondary" onClick={() => handleDelete(product.id)}>Eliminar</Button>
-                        <Button variant="outlined" color="primary" onClick={() => handleEdit(product.id)}>Editar</Button>
+                        <Button variant="outlined" color="primary" onClick={() => handleEdit(product.id, product.title, product.quantity, product.price)}>Editar</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -80,6 +116,59 @@ const Inventory = () => {
           </CardContent>
         </Card>
       </Box>
+
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            width: 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
+            Editar Producto
+          </Typography>
+          <TextField
+            label="Nombre"
+            variant="outlined"
+            fullWidth
+            value={editProductTitle}
+            onChange={(e) => setEditProductTitle(e.target.value)}
+            margin="normal"
+          />
+          <TextField
+            label="Existencias"
+            variant="outlined"
+            fullWidth
+            type="number"
+            value={editProductQuantity}
+            onChange={(e) => setEditProductQuantity(e.target.value)}
+            margin="normal"
+          />
+          <TextField
+            label="Precio"
+            variant="outlined"
+            fullWidth
+            type="number"
+            value={editProductPrice}
+            onChange={(e) => setEditProductPrice(e.target.value)}
+            margin="normal"
+          />
+          <Button variant="contained" color="primary" onClick={handleSaveEdit}>Guardar</Button>
+          <Button variant="contained" color="secondary" onClick={handleCloseModal}>Cancelar</Button>
+        </Box>
+      </Modal>
     </>
   );
 };
