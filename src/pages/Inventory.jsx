@@ -105,8 +105,8 @@ const Inventory = () => {
                       <TableCell align="right">{product.quantity}</TableCell>
                       <TableCell align="right">{product.price}</TableCell>
                       <TableCell align="center">
-                        <Button variant="outlined" color="secondary" onClick={() => handleDelete(product.id)}>Eliminar</Button>
-                        <Button variant="outlined" color="primary" onClick={() => handleEdit(product.id, product.title, product.quantity, product.price)}>Editar</Button>
+                        <Button variant="contained" color="error" onClick={() => handleDelete(product.id)}>Eliminar</Button>
+                        <Button variant="contained" color="primary" onClick={() => handleEdit(product.id, product.title, product.quantity, product.price)}>Editar</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -165,8 +165,8 @@ const Inventory = () => {
             onChange={(e) => setEditProductPrice(e.target.value)}
             margin="normal"
           />
-          <Button variant="contained" color="primary" onClick={handleSaveEdit}>Guardar</Button>
-          <Button variant="contained" color="secondary" onClick={handleCloseModal}>Cancelar</Button>
+          <Button variant="contained" color="success" onClick={handleSaveEdit}>Guardar</Button>
+          <Button variant="contained" color="error" onClick={handleCloseModal}>Cancelar</Button>
         </Box>
       </Modal>
     </>

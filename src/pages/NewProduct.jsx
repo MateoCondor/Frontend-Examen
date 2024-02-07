@@ -13,7 +13,6 @@ const NewProduct = () => {
 
   // Function for handling form submission
   const handleSubmit = async (event) => {
-
     event.preventDefault();
     const data = {
       category,
@@ -34,6 +33,12 @@ const NewProduct = () => {
 
       if (response.ok) {
         console.log('Datos de registro enviados correctamente');
+        // Limpiar el formulario
+        setCategory('Favoritos');
+        setTitle('');
+        setDescription('');
+        setPrice('');
+        setQuantity('');
         // Aquí puedes agregar cualquier lógica adicional después de enviar los datos
       } else {
         console.error('Error al enviar los datos:', response.statusText);
@@ -68,12 +73,7 @@ const NewProduct = () => {
             <Typography variant="h5" gutterBottom>
               Nuevo Producto
             </Typography>
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              onChange={handleImageChange}
-              style={{ marginBottom: '1rem' }}
-            />
+            
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel id="category-label">Categoría</InputLabel>
               <Select
